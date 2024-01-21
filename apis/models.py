@@ -27,12 +27,25 @@ class Cities(models.Model):
     id = models.AutoField(primary_key=True)
     name = models.CharField(max_length=255)
     state = models.ForeignKey(States, related_name='cities', on_delete=models.CASCADE, default=1)
+    image = CloudinaryField('image', null=True, blank=True)
 
     class Meta:
         db_table = 'cities'
 
     def __str__(self):
         return self.name
+
+    def save(self, *args, **kwargs):
+        # Set the folder dynamically based on the venue's name
+        folder_name = f'cities/{self.name}/'
+        self.image.folder = folder_name
+
+        # Save the image first to get the Cloudinary URL
+        super(Cities, self).save(*args, **kwargs)
+
+        # Update the image field with the Cloudinary URL
+        self.image = self.image.url
+        super(Cities, self).save(*args, **kwargs)
 
     
  

@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Venue, VenueImage, Vendor, VendorImage
+from .models import Venue, VenueImage, Vendor, VendorImage, Cities
 
 class VenueImageInline(admin.TabularInline):
     model = VenueImage
@@ -14,6 +14,12 @@ class VenueAdmin(admin.ModelAdmin):
 
 class VendorAdmin(admin.ModelAdmin):
     inlines = [VendorImageInline]
+
+class CitiesAdmin(admin.ModelAdmin):
+    list_display = ['name', 'state', 'image']
+
+# Register the Cities model with the admin site using the custom admin class
+admin.site.register(Cities, CitiesAdmin)
 
 # Register the models with the admin site
 admin.site.register(Venue, VenueAdmin)
